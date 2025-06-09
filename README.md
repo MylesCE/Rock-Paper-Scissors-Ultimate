@@ -1,0 +1,1 @@
+This is a simple game of Rock Paper Scissors. It is my first project i've coded in C#, but I am very proud of it. I love pushing myself to learn new things and seeing what I can do. I hope you enjoy this little application!

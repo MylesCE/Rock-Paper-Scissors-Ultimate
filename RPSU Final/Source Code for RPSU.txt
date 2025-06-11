@@ -1,0 +1,122 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+
+
+        while (true)
+        {
+
+            Console.WriteLine("Welcome to Rock, Paper, Scissors Ultimate");
+            Console.WriteLine();
+            Console.WriteLine("Please type your desired option:");
+            Console.WriteLine();
+            Console.WriteLine("Battle");
+            Console.WriteLine("Backstory");
+            Console.WriteLine("Exit");
+            Console.WriteLine();
+            String Selection = Console.ReadLine();
+            Console.WriteLine();
+
+            if (Selection == "Exit")
+            {
+                Console.WriteLine("Thanks for Playing! Press Enter to close application.");
+                Console.ReadLine();
+                return;
+            }
+            else if (Selection == "Backstory")
+            {
+                Console.WriteLine("Your name is Rocky, you love rock paper scissors, and that is all you know");
+                Console.WriteLine("2 years ago is the farthest in your mind that you can remember, and its a fond memory of playing rock paper scissors");
+                Console.WriteLine("While you are confused what happened in your life before the ring, you know that it could never be as satisfying as where you are now");
+                Console.WriteLine("You have been steadily climbing up the ladder, and now this is it, the championship match against Ivan Drockgo");
+                Console.WriteLine("The match is about to start, your vision is blurry from anxiety, hands shaking from the fear, but you beleive you can prevail");
+                Console.WriteLine("Because your name is Rocky, you love rock paper scissors, and that is all you know");
+                Console.WriteLine();
+                Console.WriteLine("Press Enter to Return to the Main Menu");
+                Console.ReadLine();
+            }
+            else if (Selection == "Battle")
+            {
+                Console.WriteLine("It's time for the Rock Paper Scissors Championship!");
+                Console.WriteLine("Please type Rock, Paper, or Scissors!");
+                Console.WriteLine();
+                while (true)
+                {
+                    string choice = Console.ReadLine();
+                    Console.WriteLine();
+                    int P1;
+                    if (choice == "Rock")
+                    {
+                        P1 = 2;
+                    }
+                    else if (choice == "Paper")
+                    {
+                        P1 = 3;
+                    }
+                    else if (choice == "Scissors")
+                    {
+                        P1 = 4;
+                    }
+                    else
+                    {
+                        Console.WriteLine("That is not a choice, please try again");
+                        continue;
+                    }
+                        Random RNG = new Random();
+                    int CPU = RNG.Next(2, 5);
+                    if (CPU == 2)
+                    {
+                        Console.WriteLine("Drockgo chose Rock!");
+                    }
+                    else if (CPU == 3)
+                    {
+                        Console.WriteLine("Drockgo chose Paper!");
+                    }
+                    else if (CPU == 4)
+                    {
+                        Console.WriteLine("Drockgo chose Scissors!");
+                    }
+                    if (P1 == CPU)
+                    {
+                        Console.WriteLine("You picked the same thing! Choose again!");
+                        continue;
+                    }
+                    else if (P1 - CPU == 2)
+                    {
+                        Console.WriteLine("You Lost! Try again next time!");
+                        Console.WriteLine();
+                        break;
+                    }
+                    else if (CPU - P1 == 2)
+                    {
+                        Console.WriteLine("You won! You get the grand prize of $30! Congrats!");
+                        Console.WriteLine();
+                        break;
+                    }
+                    else if (CPU > P1)
+                    {
+                        Console.WriteLine("You Lost! Try again next time!");
+                        Console.WriteLine();
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You won! You get the grand prize of $30! Congrats!");
+                        Console.WriteLine();
+                        break;
+                    }
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("That isn't an option. Please type a menu option");
+                Console.WriteLine();
+                continue;
+            }
+        }
+    }
+}

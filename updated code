@@ -1,0 +1,504 @@
+using System;
+using System.IO;
+using extramethods;
+
+namespace maingame
+{
+    class Program
+    {
+
+        static int totalgames = 0; static int wins = 0; static int losses = 0; static int ties = 0; static int money = 0; static int drockgodefeats = 0; static int secret = 0;
+        static int round = 1; static int cputowin = 0; static int wintowin = 0; static int letitride = 2;
+        static string DPath; static string APath; static string ach1 = "Locked", ach2 = "Locked", ach3 = "Locked", ach4 = "Locked", ach5 = "Locked", ach6 = "Locked", ach7 = "Locked";
+
+        static void Main()
+        {
+
+            string AppDat = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string RPSUdir = Path.Combine(AppDat, "RPSU");
+            Directory.CreateDirectory(RPSUdir);
+            DPath = Path.Combine(RPSUdir, "stats.txt");
+            APath = Path.Combine(RPSUdir, "achievements.txt");
+
+            LoadStats(DPath, APath);
+
+            while (true)
+            {
+                if (totalgames >= 15)
+                {
+                    ach1 = "Completed";
+                }
+                if (wins >= 10)
+                {
+                    ach2 = "Completed";
+                }
+                if (ties >= 25)
+                {
+                    ach3 = "Completed";
+                }
+                if (losses >= 10)
+                {
+                    ach4 = "Completed";
+                }
+                if (money >= 1500)
+                {
+                    ach5 = "Completed";
+                }
+                if (drockgodefeats >= 7)
+                {
+                    ach6 = "Completed";
+                }
+                if (secret == 1)
+                {
+                    ach7 = "Completed";
+                }
+                SaveStats(DPath, APath);
+
+                classic link = new();
+
+                Console.WriteLine("Welcome to Rock, Paper, Scissors Ultimate\n");
+                Console.WriteLine("Please type your desired option:\n");
+                Console.WriteLine("Battle");
+                Console.WriteLine("Ultra Battle");
+                Console.WriteLine("Stats");
+                Console.WriteLine("Achievements");
+                Console.WriteLine("Backstory");
+                Console.WriteLine("Exit\n");
+                String Selection = Console.ReadLine();
+                Console.Clear();
+
+                if (Selection.Equals("Exit", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Thanks for Playing! Press Enter to close application.");
+                    Console.ReadLine();
+                    return;
+                }
+                else if (Selection.Equals("Ultra Battle", StringComparison.OrdinalIgnoreCase))
+                {
+                    UltraBattle();
+                }
+                else if (Selection.Equals("Stats", StringComparison.OrdinalIgnoreCase))
+                {
+                    DisplayStats();
+                }
+                else if (Selection.Equals("Achievements", StringComparison.OrdinalIgnoreCase))
+                {
+                    Achievements();
+                }
+                else if (Selection.Equals("Backstory", StringComparison.OrdinalIgnoreCase))
+                {
+                    link.backstory();
+                }
+                else if (Selection.Equals("lottamoney2", StringComparison.OrdinalIgnoreCase))
+                {
+                    money = money + 600; // FOR DEBUG TESTING ONLY
+                    SaveStats(DPath, APath);
+                }
+                else if (Selection.Equals("lessmoney3", StringComparison.OrdinalIgnoreCase))
+                {
+                    money = money - 600; // FOR DEBUG TESTING ONLY
+                    SaveStats(DPath, APath);
+                }
+                else if (Selection.Equals("Battle", StringComparison.OrdinalIgnoreCase))
+                {
+                    cputowin = 0; wintowin = 0; round = 1;
+                    Console.WriteLine($"It's time for the Rock Paper Scissors Championship!\n");
+                    while (round <= 3 && cputowin < 2 && wintowin < 2)
+                    {
+                        Console.WriteLine($"Start round {round}!");
+                        Console.WriteLine("Please type Rock, Paper, or Scissors!\n");
+                        Console.WriteLine($"Score: You - {wintowin} | CPU - {cputowin}\n");
+                        Console.WriteLine();
+                        string Choice = Console.ReadLine();
+                        Console.WriteLine();
+                        int P1;
+                        if (Choice.Equals("Rock", StringComparison.OrdinalIgnoreCase))
+                        {
+                            P1 = 2;
+                            Console.Clear();
+                        }
+                        else if (Choice.Equals("Paper", StringComparison.OrdinalIgnoreCase))
+                        {
+                            P1 = 3;
+                            Console.Clear();
+                        }
+                        else if (Choice.Equals("Scissors", StringComparison.OrdinalIgnoreCase))
+                        {
+                            P1 = 4;
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine("That is not a choice, please try again\n");
+                            continue;
+                        }
+                        Random RNG = new Random();
+                        int CPU = RNG.Next(2, 5);
+                        if (CPU == 2)
+                        {
+                            Console.WriteLine("Drockgo chose Rock!");
+                        }
+                        else if (CPU == 3)
+                        {
+                            Console.WriteLine("Drockgo chose Paper!");
+                        }
+                        else if (CPU == 4)
+                        {
+                            Console.WriteLine("Drockgo chose Scissors!");
+                        }
+                        if (P1 == CPU)
+                        {
+                            Console.WriteLine("You picked the same thing! Choose again!\n\n");
+                            ++ties;
+                            continue;
+                        }
+                        else if (P1 - CPU == 2)
+                        {
+                            Console.WriteLine("You lost this round! Try again next time!"); ;
+                            ++round;
+                            ++cputowin;
+                            link.buffer();
+                        }
+                        else if (CPU > P1 && CPU - P1 != 2)
+                        {
+                            Console.WriteLine("You lost this round! Try again next time!");
+                            ++round;
+                            ++cputowin;
+                            link.buffer();
+                        }
+                        else if (CPU - P1 == 2)
+                        {
+                            Console.WriteLine("You won this round! Congrats!");
+                            ++round;
+                            ++wintowin;
+                            link.buffer();
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("You won this round! Congrats!");
+                            ++round;
+                            ++wintowin;
+                            link.buffer();
+                        }
+                        if (cputowin == 2)
+                        {
+                            Console.WriteLine("You Lost the Championship! Come back when you are stronger!");
+                            ++losses;
+                            ++totalgames;
+                            link.buffer();
+                        }
+                        else if (wintowin == 2)
+                        {
+                            Console.WriteLine("You won the Championship! You receive the grand prize of $20!");
+                            ++wins;
+                            ++totalgames;
+                            ++drockgodefeats;
+                            money = money + 20;
+                            link.buffer();
+                        }
+                    }
+                    SaveStats(DPath, APath);
+                }
+                else
+                {
+                    Console.WriteLine("That isn't an option. Please type a menu option\n");
+                    continue;
+
+                }
+            }
+        }
+        static void LoadStats(string DPath, string APath)
+        {
+            if (File.Exists(DPath))
+            {
+                string[] lines = File.ReadAllLines(DPath);
+                foreach (string line in lines)
+                {
+
+                    string[] parts = line.Split(':');
+                    if (parts.Length == 2)
+                    {
+
+                        string key = parts[0];
+                        int value = int.Parse(parts[1]);
+
+                        if (key == "Total games") totalgames = value;
+                        else if (key == "Wins") wins = value;
+                        else if (key == "Losses") losses = value;
+                        else if (key == "Ties") ties = value;
+                        else if (key == "Money") money = value;
+                        else if (key == "Drockgo defeats") drockgodefeats = value;
+                    }
+                }
+            }
+            if (File.Exists(APath))
+            {
+                string[] texts = File.ReadAllLines(APath);
+                foreach (string text in texts)
+                {
+                    string[] pieces = text.Split(':');
+                    if (pieces.Length == 2)
+                    {
+                        string key = pieces[0];
+                        string value = (pieces[1]);
+
+                        if (key == "Complete 15 games") ach1 = value;
+                        else if (key == "Win 10 games") ach2 = value;
+                        else if (key == "Tie 25 times") ach3 = value;
+                        else if (key == "Lose 10 games") ach4 = value;
+                        else if (key == "Have a total of $1500 at one time") ach5 = value;
+                        else if (key == "Beat Drockgo 7 times") ach6 = value;
+                        else if (key == "Enter the secret phrase hidden on the Github page") ach7 = value;
+
+                    }
+                }
+            }
+            else
+            {
+                SaveStats(DPath, APath);
+            }
+        }
+        static void SaveStats(string DPath, string APath)
+        {
+            string[] currentstats =
+            {
+            $"Total games:{totalgames}",
+            $"Wins:{wins}",
+            $"Losses:{losses}",
+            $"Ties:{ties}",
+            $"Money:{money}",
+            $"Drockgo defeats:{drockgodefeats}"
+        };
+            File.WriteAllLines(DPath, currentstats);
+
+            string[] currentachievements =
+            {
+            $"Complete 15 games:{ach1}",
+            $"Win 10 games:{ach2}",
+            $"Tie 25 times:{ach3}",
+            $"Lose 10 games:{ach4}",
+            $"Have a total of $1500 at one time:{ach5}",
+            $"Beat Drockgo 7 times:{ach6}",
+            $"Enter the secret phrase hidden on the Github page{ach7}",
+        };
+            File.WriteAllLines(APath, currentachievements);
+        }
+        static void DisplayStats()
+        {
+            classic link = new();
+            Console.WriteLine($"Total games = {totalgames}");
+            Console.WriteLine($"Wins = {wins}");
+            Console.WriteLine($"Losses = {losses}");
+            Console.WriteLine($"Ties = {ties}");
+            Console.WriteLine($"Money = ${money}");
+            Console.WriteLine($"Drockgo defeats = {drockgodefeats}");
+            link.buffer();
+        }
+        static void Achievements()
+        {
+            classic link = new();
+            Console.WriteLine($"Complete 15 games: {ach1}");
+            Console.WriteLine($"Win 10 games: {ach2}");
+            Console.WriteLine($"Tie 25 times: {ach3}");
+            Console.WriteLine($"Lose 10 games: {ach4}");
+            Console.WriteLine($"Have a total of $1500 at one time: {ach5}");
+            Console.WriteLine($"Beat Drockgo 7 times: {ach6}");
+            Console.WriteLine($"Enter the secret phrase hidden on the Github page: {ach7}\n");
+            link.buffer();
+        }
+        static void UltraBattle()
+        {
+            classic link = new();
+            LoadStats(DPath, APath);
+
+            if (money <= 1)
+            {
+                Console.WriteLine("You don't have enough money! come back when you aren't broke!");
+                link.buffer();
+            }
+            else if (money >= 2)
+            {
+                cputowin = 0; wintowin = 0; round = 1;
+                while (true)
+                {
+                    Console.WriteLine("Welcome to the Ultra Battle!\n");
+                    Console.WriteLine("Please type leave if you want to return to the menu");
+                    Console.WriteLine("Please type start to begin the Ultra Battle\n");
+                    String Selection = Console.ReadLine();
+                    Console.Clear();
+                    if (Selection.Equals("Start", StringComparison.OrdinalIgnoreCase))
+                    {
+                        LoadStats(DPath, APath);
+                        Console.WriteLine("How much money would you like to bet?\n");
+                        Console.WriteLine($"Money = ${money}\n");
+                        int bet = int.Parse(Console.ReadLine());
+                        Console.Clear();
+                        if (bet >= 2 && bet <= money)
+                        {
+                            money = money - bet;
+                            Console.WriteLine("Start the Ultra Battle!\n");
+                            cputowin = 0; wintowin = 0; round = 1;
+                            while (round <= 3 && cputowin < 2 && wintowin < 2)
+                            {
+                                do
+                                {
+                                    Console.WriteLine($"Start round {round}!");
+                                    Console.WriteLine("Please type Rock, Paper, or Scissors!\n");
+                                    Console.WriteLine($"Score: You - {wintowin} | CPU - {cputowin}\n");
+                                    string Choice = Console.ReadLine();
+                                    Console.WriteLine();
+                                    int P1;
+                                    if (Choice.Equals("Rock", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        P1 = 2;
+                                        Console.Clear();
+                                    }
+                                    else if (Choice.Equals("Paper", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        P1 = 3;
+                                        Console.Clear();
+                                    }
+                                    else if (Choice.Equals("Scissors", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        P1 = 4;
+                                        Console.Clear();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("That is not a choice, please try again");
+                                        continue;
+                                    }
+                                    Random RNG = new Random();
+                                    int CPU = RNG.Next(2, 5);
+                                    if (CPU == 2)
+                                    {
+                                        Console.WriteLine("Opponent chose Rock!");
+                                    }
+                                    else if (CPU == 3)
+                                    {
+                                        Console.WriteLine("Opponent chose Paper!");
+                                    }
+                                    else if (CPU == 4)
+                                    {
+                                        Console.WriteLine("Opponent chose Scissors!");
+                                    }
+                                    if (P1 == CPU)
+                                    {
+                                        Console.WriteLine("You picked the same thing! Choose again!\n\n");
+                                        ++ties;
+                                        continue;
+                                    }
+                                    else if (P1 - CPU == 2)
+                                    {
+                                        Console.WriteLine($"You lost this round! Try again next time!");
+                                        ++cputowin;
+                                        ++round;
+                                        link.buffer();
+                                    }
+                                    else if (CPU > P1 && CPU - P1 != 2)
+                                    {
+                                        Console.WriteLine($"You lost this round! Try again next time!");
+                                        ++cputowin;
+                                        ++round;
+                                        link.buffer();
+                                    }
+                                    else if (CPU - P1 == 2)
+                                    {
+                                        Console.WriteLine($"You won this round! Congrats!");
+                                        ++wintowin;
+                                        ++round;
+                                        link.buffer();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"You won this round! Congrats!");
+                                        ++wintowin;
+                                        ++round;
+                                        link.buffer();
+                                    }
+                                    if (cputowin == 2)
+                                    {
+                                        Console.WriteLine($"You lost the Ultra Battle! You lost ${bet}. Come back when you can actually fight!");
+                                        ++losses;
+                                        ++totalgames;
+                                        link.buffer();
+                                    }
+                                    else if (wintowin == 2)
+                                    {
+                                        Console.WriteLine($"You won the Ultra Battle! Congratulations on winning ${bet}!");
+                                        ++wins;
+                                        ++totalgames;
+                                        Console.WriteLine($"Would you like to let it ride, and go for a chance to further double your winnings?");
+                                        Choice = Console.ReadLine();
+                                        if (Choice.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            letitride = letitride * 2;
+                                        }
+                                        else
+                                        {
+                                            bet = bet * letitride;
+                                            money = money + bet;
+                                        }
+                                    }
+                                }
+                                while (letitride > 2);
+
+                            else
+                                {
+                                    Console.WriteLine("You lost all of your money! Get out!");
+                                    link.buffer();
+                                    break;
+                                }
+                                SaveStats(DPath, APath);
+
+                            }
+                        }
+                        else if (Selection.Equals("Leave", StringComparison.OrdinalIgnoreCase))
+                        {
+                            break;
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+using System;
+using maingame;
+using System.IO;
+
+namespace extramethods
+{
+    class classic
+    {
+        public void buffer()
+        {
+            Program link = new();
+
+            Console.WriteLine();
+            Console.WriteLine("Press Enter to Continue");
+            Console.ReadLine();
+            Console.Clear();
+        }
+        public void backstory()
+        {
+            Console.WriteLine("Your name is Rocky, you love rock paper scissors, and that is all you know");
+            Console.WriteLine("2 years ago is the farthest in your mind that you can remember, and its a fond memory of playing rock paper scissors");
+            Console.WriteLine("While you are confused what happened in your life before the ring, you know that it could never be as satisfying as where you are now");
+            Console.WriteLine("You have been steadily climbing up the ladder, and now this is it, the championship match against Ivan Drockgo");
+            Console.WriteLine("The match is about to start, your vision is blurry from anxiety, hands shaking from the fear, but you beleive you can prevail");
+            Console.WriteLine("Because your name is Rocky, you love rock paper scissors, and that is all you know\n");
+            Console.WriteLine("Press Enter to Return to the Main Menu");
+            Console.ReadLine();
+            Console.Clear();
+        }
+        public void flipflop()
+        {
+            
+        }
+    }
+}
